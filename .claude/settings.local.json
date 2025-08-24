@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build:*)",
+      "Bash(npm install)",
+      "Bash(npx tsc:*)",
+      "Bash(./node_modules/.bin/tsc:*)",
+      "Bash(npm install:*)",
+      "Bash(node:*)",
+      "Bash(npx tsx:*)",
+      "Bash(taskkill:*)",
+      "Bash(npm start)",
+      "Bash(npm run start:login:*)",
+      "Bash(curl:*)",
+      "Bash(npm run test:*)",
+      "Bash(npm run start:gateway:*)",
+      "Bash(npm run start:logic:*)",
+      "Bash(npm run stop:login:*)",
+      "Bash(npm run stop:gateway:*)",
+      "Bash(npm run stop:logic:*)"
+    ],
+    "additionalDirectories": [
+      "D:\\"
+    ]
+  }
+}
