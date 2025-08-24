@@ -17,7 +17,23 @@
       "Bash(npm run start:logic:*)",
       "Bash(npm run stop:login:*)",
       "Bash(npm run stop:gateway:*)",
-      "Bash(npm run stop:logic:*)"
+      "Bash(npm run stop:logic:*)",
+      "WebSearch",
+      "Read(/D:\\d D:\\IAA\\Mini-Game\\code\\108_wb/**)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(rm:*)",
+      "Bash(nest new:*)",
+      "Bash(npm run start:*)",
+      "Bash(vue create:*)",
+      "Bash(npm create:*)",
+      "Bash(npm init:*)",
+      "Bash(npm run dev:*)",
+      "Bash(mongosh:*)",
+      "Bash(mongo:*)",
+      "Bash(pkill:*)",
+      "Bash(wmic:*)",
+      "Bash(git config:*)"
     ],
     "additionalDirectories": [
       "D:\\"

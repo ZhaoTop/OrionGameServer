@@ -1,6 +1,6 @@
-# OrionGameServer Framework
+# OrionGameServer Framework v2.0
 
-一个基于 Node.js + TypeScript 的分布式休闲游戏服务器框架，遵循代码简洁之道，提供高性能、高安全性、高可扩展性的游戏服务解决方案。
+基于 NestJS + Vue 3 + Element Plus 的现代化分布式游戏服务器管理系统，提供高性能、高安全性、高可扩展性的游戏服务解决方案。
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
 ![Security Score](https://img.shields.io/badge/security-85.7%25-green)
@@ -15,133 +15,209 @@
 git clone https://github.com/your-repo/orion-game-server.git
 cd orion-game-server
 
-# 2. 安装依赖
+# 2. 启动后端服务
+cd server
 npm install
+npm run start:dev
 
-# 3. 配置环境
-cp .env.example .env
+# 3. 启动管理后台 (新终端)
+cd ../admin-dashboard  
+npm install
+npm run dev
 
-# 4. 启动服务
-npm start
-
-# 5. 运行测试
-npm run test:simple
+# 4. 访问系统
+# API文档: http://localhost:3000/api/docs
+# 管理后台: http://localhost:8080
 ```
 
-**🎯 30秒即可启动完整的分布式游戏服务器！**
+**🎯 现代化的游戏服务器 + 可视化管理后台！**
 
-## 特性
+## ✨ 核心特性
 
-- 🚀 **高性能**: 基于 Node.js 异步I/O，支持大量并发连接
-- 🔒 **高安全性**: 双重加密、防DDOS、防外挂等完整安全机制
-- 📈 **可扩展**: 微服务架构，支持水平扩展
-- 🧹 **代码简洁**: 遵循Clean Code原则，代码可读性强
-- 💪 **类型安全**: TypeScript提供静态类型检查
-- 🔄 **实时通信**: WebSocket支持实时双向通信
+### 🖥️ 管理后台
+- **Vue 3 + TypeScript**: 现代化前端框架，类型安全
+- **Element Plus**: 企业级UI组件库，开箱即用
+- **数据可视化**: 实时数据统计、用户留存分析  
+- **用户管理**: 完整的用户CRUD操作界面
+- **权限控制**: JWT认证，安全的权限管理
 
-## 架构概览
+### ⚡ 后端服务  
+- **NestJS框架**: 企业级Node.js框架，装饰器驱动
+- **自动API文档**: Swagger自动生成，无需手动维护
+- **类型验证**: class-validator自动验证请求参数
+- **模块化架构**: 清晰的分层结构，易于维护扩展
 
-### 微服务架构
-- **网关服务器 (Gateway)**: 客户端连接入口，WebSocket管理，消息路由
-- **登录服务器 (Login)**: 用户认证，Token生成，游客登录
-- **逻辑服务器 (Logic)**: 游戏核心逻辑，社交功能，业务模块
+### 🔒 安全与性能
+- **JWT双令牌**: Access Token + Refresh Token机制
+- **数据加密**: bcrypt密码加密，敏感数据保护
+- **CORS防护**: 跨域请求安全控制
+- **MongoDB + Redis**: 高性能数据存储方案
+
+## 🏗️ 系统架构
+
+### 后端架构 (NestJS)
+```
+server/
+├── src/modules/
+│   ├── auth/           # 用户认证模块
+│   ├── admin/          # 管理后台模块  
+│   └── user/           # 用户管理模块
+├── src/common/         # 公共组件
+│   ├── config/         # 配置管理
+│   ├── guards/         # 路由守卫
+│   └── decorators/     # 自定义装饰器
+└── main.ts            # 应用入口
+```
+
+### 前端架构 (Vue 3)
+```
+admin-dashboard/
+├── src/views/
+│   ├── Dashboard/      # 数据概览
+│   ├── User/          # 用户管理  
+│   └── Analytics/     # 数据分析
+├── src/store/         # Pinia状态管理
+├── src/router/        # Vue Router路由
+└── src/api/           # API接口封装
+```
 
 ### 技术栈
-- **运行时**: Node.js v20+
-- **开发语言**: TypeScript
-- **数据库**: MongoDB + Redis
-- **通信**: WebSocket/WSS + HTTP/HTTPS
-- **认证**: JWT + AES加密
-- **日志**: Winston
-- **代码规范**: ESLint + Prettier
+| 类别 | 后端 | 前端 |
+|------|------|------|
+| **框架** | NestJS + TypeScript | Vue 3 + TypeScript |
+| **UI组件** | Swagger UI | Element Plus |
+| **数据库** | MongoDB + Mongoose | - |
+| **缓存** | Redis + ioredis | - |
+| **状态管理** | - | Pinia |
+| **路由** | NestJS Router | Vue Router 4 |
+| **HTTP客户端** | Axios | Axios |
+| **构建工具** | Nest CLI | Vite |
 
-## 快速开始
+## 🚀 详细部署指南
 
-### 环境要求
-- Node.js >= 20.0.0
-- MongoDB >= 5.0
-- Redis >= 6.0
+### 📋 环境要求
+- **Node.js**: >= 20.0.0
+- **MongoDB**: >= 6.0 (系统自动连接本地MongoDB)
+- **npm**: >= 8.0
 
-### 安装依赖
+### 🛠 安装步骤
 
+#### 1. 后端服务安装
 ```bash
+# 进入后端目录
+cd server
+
+# 安装依赖
 npm install
+
+# 环境配置（可选，系统已有默认配置）
+# JWT_SECRET=your-jwt-secret-here
+# DATABASE_URL=mongodb://localhost:27017/warrior-game
 ```
 
-### 配置环境变量
-
+#### 2. 前端管理后台安装
 ```bash
-cp .env.example .env
-# 编辑 .env 文件，配置数据库连接等信息
+# 进入前端目录
+cd admin-dashboard
+
+# 安装依赖
+npm install
 ```
 
 ### 🚀 启动服务
 
+#### 开发模式启动 (推荐)
+```bash
+# 1. 启动后端服务 (端口3000)
+cd server
+npm run start:dev
+
+# 2. 新开终端，启动前端服务 (端口8080) 
+cd admin-dashboard
+npm run dev
+```
+
 #### 生产模式启动
 ```bash
-# 启动所有服务 (gateway + login + logic)
-npm start
+# 后端生产构建和启动
+cd server
+npm run build
+npm run start:prod
 
-# 启动单个服务
-npm run start:login    # 只启动登录服务
-npm run start:gateway  # 只启动网关服务  
-npm run start:logic    # 只启动逻辑服务
+# 前端生产构建
+cd admin-dashboard
+npm run build
+# 将 dist 目录部署到 Web 服务器
 ```
 
-#### 开发模式启动 (文件变化自动重启)
-```bash
-# 开发模式启动所有服务
-npm run dev
+### 🌐 访问系统
 
-# 开发模式启动单个服务
-npm run dev:login      # 开发模式启动登录服务
-npm run dev:gateway    # 开发模式启动网关服务
-npm run dev:logic      # 开发模式启动逻辑服务
-```
+启动成功后，您可以访问：
+
+- **📚 API文档**: http://localhost:3000/api/docs (Swagger交互式文档)
+- **💻 管理后台**: http://localhost:8080 (Vue 3 + Element Plus)
+- **🔍 健康检查**: http://localhost:3000/health
 
 ### 🛑 停止服务
 
-#### 停止所有服务
 ```bash
-# 强制停止所有 Node.js 进程 (谨慎使用)
-npm run stop
+# 使用 Ctrl+C 停止开发服务器
+# 或者强制停止所有Node进程 (谨慎使用)
+taskkill /f /im node.exe  # Windows
+killall node             # macOS/Linux
 ```
 
-#### 停止单个服务
-```bash
-# 智能停止指定服务 (推荐)
-npm run stop:login     # 停止登录服务 (端口 3005)
-npm run stop:gateway   # 停止网关服务 (端口 8080)  
-npm run stop:logic     # 停止逻辑服务 (端口 3003)
-```
-
-> 💡 **提示**: 单个服务停止命令会智能识别对应端口的进程并安全终止，推荐使用。
-
-## 项目结构
+## 📁 项目结构
 
 ```
 orion-game-server/
-├── docs/                     # 项目文档
-│   └── ARCHITECTURE.md       # 架构设计文档
-├── src/
-│   ├── services/             # 微服务目录
-│   │   ├── gateway/          # 网关服务器
-│   │   ├── login/            # 登录服务器
-│   │   └── logic/            # 逻辑服务器
-│   ├── common/               # 公共代码
-│   │   ├── config/           # 配置管理
-│   │   ├── database/         # 数据库连接
-│   │   ├── interfaces/       # TypeScript接口
-│   │   ├── logger/           # 日志系统
-│   │   └── utils/            # 工具函数
-│   └── index.ts              # 项目入口
-├── tests/                    # 测试文件
-└── ...配置文件
+├── 📂 server/                 # NestJS后端服务
+│   ├── src/
+│   │   ├── modules/          # 功能模块
+│   │   │   ├── auth/         # 🔐 认证模块 (登录、注册、JWT)
+│   │   │   ├── admin/        # 👥 管理后台模块 (用户管理、统计)
+│   │   │   └── user/         # 👤 用户数据模块 (MongoDB Schema)
+│   │   ├── common/           # 公共组件
+│   │   │   ├── config/       # ⚙️ 配置管理 (数据库、JWT等)
+│   │   │   ├── guards/       # 🛡️ 路由守卫 (JWT认证)
+│   │   │   └── decorators/   # 🏷️ 自定义装饰器 (@Public等)
+│   │   ├── app.module.ts     # 🏗️ 根模块
+│   │   └── main.ts           # 🚀 应用入口 (Swagger配置)
+│   ├── .env                  # 🔧 环境变量配置
+│   └── package.json          # 📦 后端依赖配置
+├── 📂 admin-dashboard/        # Vue 3管理后台
+│   ├── src/
+│   │   ├── views/            # 📄 页面组件
+│   │   │   ├── Dashboard/    # 📊 仪表板 (数据概览)
+│   │   │   ├── User/         # 👥 用户管理 (列表、详情)
+│   │   │   └── Analytics/    # 📈 数据分析 (留存率)
+│   │   ├── router/           # 🛣️ Vue Router路由配置
+│   │   ├── store/            # 📦 Pinia状态管理 (认证状态)
+│   │   ├── api/              # 🔌 API接口封装 (Axios)
+│   │   └── types/            # 📝 TypeScript类型定义
+│   ├── vite.config.ts        # ⚡ Vite构建配置
+│   └── package.json          # 📦 前端依赖配置
+├── 📂 docs/                   # 项目文档
+│   ├── API.md               # 🔌 完整API接口文档
+│   └── DEPLOYMENT.md        # 🚀 详细部署指南
+├── ARCHITECTURE.md           # 🏗️ v2.0架构设计文档
+└── README.md                 # 📖 项目说明文档
 ```
 
-## API接口
+## 🔌 API接口文档
 
-### 登录服务 (默认端口: 3005)
+### 📋 接口总览
+
+**基础URL**: `http://localhost:3000`
+
+| 模块 | 路径 | 描述 |
+|------|------|------|
+| 🔐 **认证** | `/auth/*` | 用户登录、注册、JWT管理 |
+| 👥 **管理** | `/admin/*` | 用户管理、数据统计 (需要JWT) |
+| 🏥 **监控** | `/health` | 系统健康检查 |
+| 📚 **文档** | `/api/docs` | Swagger交互式文档 |
+
+### 🔐 认证接口
 
 #### 游客登录
 ```http
@@ -149,7 +225,20 @@ POST /auth/guest-login
 Content-Type: application/json
 
 {
-  "deviceId": "unique-device-id"
+  "deviceId": "550e8400-e29b-41d4-a716-446655440000"
+}
+
+# 响应示例
+{
+  "success": true,
+  "data": {
+    "user": {
+      "id": "ea3d289e-bf76-426d-aecf-cfd2b69add90",
+      "isGuest": true
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
 }
 ```
 
@@ -159,8 +248,23 @@ POST /auth/register
 Content-Type: application/json
 
 {
-  "username": "player123",
-  "password": "securepassword"
+  "username": "testuser",
+  "password": "testpass123",
+  "email": "test@example.com"
+}
+
+# 响应示例
+{
+  "success": true,
+  "data": {
+    "user": {
+      "id": "b3ff1aae-fa0c-41cf-9db7-d62a69d118a9",
+      "username": "testuser",
+      "isGuest": false
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  }
 }
 ```
 
@@ -170,31 +274,48 @@ POST /auth/login
 Content-Type: application/json
 
 {
-  "username": "player123",
-  "password": "securepassword"
+  "username": "testuser",
+  "password": "testpass123"
 }
 ```
 
-### WebSocket连接 (网关服务 - 默认端口: 8080)
+### 👥 管理后台接口 (需要JWT认证)
 
-```javascript
-const ws = new WebSocket('ws://localhost:8080');
+```http
+# 请求头添加认证信息
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 
-// 认证
-ws.send(JSON.stringify({
-  type: 'auth',
-  payload: { token: 'your-jwt-token' }
-}));
+# 获取用户列表
+GET /admin/users?page=1&limit=10
 
-// 发送聊天消息
-ws.send(JSON.stringify({
-  type: 'chat',
-  payload: {
-    type: 'global',
-    content: 'Hello world!'
-  }
-}));
+# 获取用户详情
+GET /admin/users/{userId}
+
+# 获取游戏统计
+GET /admin/stats/game
+
+# 获取留存统计
+GET /admin/stats/retention
 ```
+
+### 🏥 系统监控
+
+```http
+# 健康检查
+GET /health
+
+# 响应示例
+{
+  "status": "ok",
+  "timestamp": "2025-08-24T11:51:47.502Z",
+  "uptime": 49,
+  "version": "2.0.0"
+}
+```
+
+### 📚 完整API文档
+
+访问 **http://localhost:3000/api/docs** 查看完整的Swagger交互式文档
 
 ## 开发指南
 

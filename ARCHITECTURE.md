@@ -1,7 +1,7 @@
-# OrionGameServer Framework 架构设计文档
+# OrionGameServer Framework v2.0 架构设计文档
 
 ## 项目概述
-**OrionGameServer** (猎户座游戏服务器) 是一个基于 Node.js + TypeScript 的分布式休闲游戏服务器框架，遵循代码简洁之道，提供高性能、高安全性、高可扩展性的游戏服务解决方案。
+**OrionGameServer v2.0** (猎户座游戏服务器) 是一个基于 NestJS + Vue 3 的现代化分布式游戏服务器管理系统，遵循代码简洁之道，提供高性能、高安全性、高可扩展性的游戏服务解决方案。本版本完全重构架构，采用企业级框架和最佳实践。
 
 ## 核心设计原则
 
@@ -16,164 +16,217 @@
 
 ## 技术栈
 
-| 类别 | 技术/库 | 用途 |
-|------|---------|------|
-| 运行时环境 | Node.js (v20.x+) | 高性能异步I/O |
-| 开发语言 | TypeScript | 静态类型，提升代码质量 |
-| 数据库 | MongoDB + Mongoose | 数据持久化存储 |
-| 缓存 | Redis + ioredis | 缓存热点数据，会话管理 |
-| 通信协议 | WebSocket/WSS | 实时双向通信 |
-| 数据格式 | JSON | 轻量数据交换 |
-| 加密 | AES + TLS | 内容加密 + 传输加密 |
-| 日志 | Winston/Pino | 结构化日志记录 |
-| 负载均衡 | Nginx + PM2 | 流量分发，进程管理 |
-| 代码规范 | ESLint + Prettier | 代码风格一致性 |
+| 类别 | 技术/库 | 版本 | 用途 |
+|------|---------|------|------|
+| 运行时环境 | Node.js | >= 20.x | 高性能异步I/O |
+| 开发语言 | TypeScript | >= 5.0 | 静态类型，提升代码质量 |
+| **后端框架** | **NestJS** | **>= 10.x** | **企业级Node.js框架，装饰器驱动** |
+| API文档 | @nestjs/swagger | >= 7.0 | 自动生成Swagger文档，零配置 |
+| **前端框架** | **Vue 3** | **>= 3.3** | **组合式API，现代化响应式框架** |
+| UI组件库 | Element Plus | >= 2.3 | Vue3企业级组件库，开箱即用 |
+| 数据库 | MongoDB + Mongoose | >= 6.0 | 数据持久化存储 |
+| 状态管理 | Pinia | >= 2.1 | Vue状态管理，替代Vuex |
+| 路由 | Vue Router | >= 4.2 | 前端路由管理 |
+| 构建工具 | Vite | >= 4.0 | 极速构建工具 |
+| HTTP客户端 | Axios | >= 1.4 | API接口调用 |
+| 认证 | JWT + bcrypt | - | 令牌认证+密码加密 |
+| 验证 | class-validator | >= 0.14 | 请求参数验证 |
+| 代码规范 | ESLint + Prettier | - | 代码风格一致性 |
 
-## 分布式架构设计
+## 架构设计 v2.0
 
-### 微服务架构
-采用微服务架构，各服务独立部署、扩展和维护：
+### 整体架构
+基于NestJS模块化架构 + Vue 3管理后台的一体化解决方案：
 
-#### 1. 网关服务器 (Gateway Server)
+#### 1. 核心后端服务 (NestJS Backend)
 **职责:**
-- 客户端连接唯一入口
-- WebSocket连接管理
-- 协议解析与加密解密
-- 消息路由到后端服务
-- 客户端消息广播
+- 统一API接口服务
+- 用户认证与授权管理
+- 游戏数据统计与分析
+- 管理后台API支持
+- 自动API文档生成
 
 **技术实现:**
-- WSS连接处理
-- Redis Pub/Sub消息分发
-- 连接管理器维护session映射
-- 防DDOS连接频率限制
+- NestJS模块化架构
+- @nestjs/swagger自动文档
+- JWT双Token认证机制
+- MongoDB数据持久化
+- 全局异常过滤器
 
-#### 2. 登录服务器 (Login Server)
+#### 2. 认证模块 (Auth Module)
 **职责:**
-- 用户注册、登录处理
-- JWT Token生成与验证
-- 游客登录与账户绑定
-- 用户信息验证
+- 游客登录与设备管理
+- 用户注册与登录
+- JWT Token生成与刷新
+- 密码安全加密
 
 **技术实现:**
-- HTTP/HTTPS接口
-- JWT Token管理
-- 设备ID生成 (UUID)
-- 第三方账号集成接口
+- @Public()装饰器控制公开API
+- bcrypt密码哈希
+- UUID设备ID生成
+- 双Token机制(AccessToken + RefreshToken)
 
-#### 3. 逻辑服务器 (Logic Server)
+#### 3. 管理模块 (Admin Module)
 **职责:**
-- 游戏核心逻辑处理
-- 社交功能 (聊天系统)
-- 业务模块 (匹配、战斗、任务)
-- 数据库交互
+- 用户信息管理
+- 游戏数据统计
+- 用户留存分析
+- 系统监控数据
 
 **技术实现:**
-- RPC/消息队列通信
-- 高度模块化设计
-- Redis Pub/Sub消息发布
-- 负载均衡动态分配
+- JWT守卫保护管理API
+- MongoDB聚合查询
+- 留存率计算算法
+- 分页查询优化
 
-#### 4. 数据库服务器 (Database Server)
+#### 4. 管理后台 (Vue 3 Dashboard)
 **职责:**
-- 统一数据访问接口
-- 数据持久化存储
-- 定期数据备份
-- 数据一致性保障
+- 可视化数据展示
+- 用户管理界面
+- 数据分析图表
+- 系统状态监控
 
 **技术实现:**
-- MongoDB集群
+- Vue 3组合式API
+- Element Plus组件库
+- Pinia状态管理
+- Axios API封装
+- TypeScript类型安全
+
+#### 5. 数据层 (Data Layer)
+**职责:**
+- 用户数据模型
+- 游戏统计数据
+- Schema验证
+- 数据关系管理
+
+**技术实现:**
 - Mongoose ODM
-- mongodump定时备份
-- Schema类型检查
+- MongoDB文档数据库
+- Schema类型验证
+- 索引优化查询
 
-## 安全机制
+## 安全机制 v2.0
 
-### 防外挂
-- 关键逻辑服务端计算
-- 异常行为检测与分析
-- 通信数据AES加密
-- 客户端仅负责表现层
+### JWT认证安全
+- **双Token机制**: AccessToken + RefreshToken
+- **安全守卫**: JWT全局守卫保护API
+- **公开API**: @Public()装饰器控制
+- **Token过期**: 自动刷新机制
 
-### 防DDOS
-- Nginx/云服务流量清洗
-- IP黑白名单机制
-- 单IP连接数限制
-- 请求频率控制
+### 数据验证安全
+- **参数验证**: class-validator全局验证
+- **类型安全**: TypeScript类型棆查
+- **DTO验证**: 请求数据传输对象验证
+- **Schema校验**: Mongoose Schema数据类型校验
 
-### 防注入攻击
-- 严格数据格式校验
-- class-validator参数验证
-- 禁用eval等危险函数
-- MongoDB防NoSQL注入
+### 密码加密安全
+- **bcrypt哈希**: 密码加密存储
+- **盐值加密**: 防彩虹表攻击
+- **密码复杂度**: 可配置密码策略
+- **敏感数据**: 不记录敏感信息日志
 
-### 通信加密
-- **双重加密**: HTTPS/WSS + AES内容加密
-- **密钥交换**: 登录后HTTPS安全交换AES密钥
-- **加密流程**: JSON → AES加密 → Base64编码 → WSS传输
+### CORS与跨域安全
+- **CORS配置**: 跨域请求安全控制
+- **域名白名单**: 仅允许指定域名访问
+- **请求方法**: 限制允许的HTTP方法
+- **请求头**: 控制允许的请求头
 
-## 核心功能实现
+## 核心功能实现 v2.0
 
-### 登录与重连
-1. **登录流程**:
-   - 客户端HTTPS请求登录服务器
-   - 验证成功生成JWT Token
-   - Session信息存入Redis
-   - 客户端携带Token连接网关
+### 认证流程
+1. **游客登录**:
+   - 设备ID(UUID)自动生成
+   - 创建游客账户
+   - 生成JWT AccessToken + RefreshToken
+   - 返回用户信息和Token
 
-2. **断线重连**:
-   - Token有效期内可重连任意网关
-   - 验证Redis中Session存在性
-   - 通知逻辑服务器更新玩家状态
+2. **用户注册/登录**:
+   - bcrypt密码加密验证
+   - 创建正式用户账户
+   - JWT Token生成与管理
+   - 用户信息持久化存储
 
-### 负载均衡
-- **网关层**: Nginx轮询/最少连接策略
-- **逻辑层**: 根据服务器负载动态分配
-- **负载信息**: 定期上报到Redis
+3. **Token管理**:
+   - AccessToken(短期有效)
+   - RefreshToken(长期有效)
+   - 自动Token刷新机制
+   - Token黑名单管理
 
-### 消息系统
-- **全局聊天**: Redis Pub/Sub全局广播
-- **私聊**: 定向发送到目标用户网关
-- **消息路由**: 网关订阅频道自动分发
+### 管理后台功能
+1. **数据统计**:
+   - 实时用户数据统计
+   - 游戏数据分析
+   - 用户留存率计算
+   - 数据可视化展示
 
-## 目录结构
+2. **用户管理**:
+   - 用户列表分页查询
+   - 用户详情信息展示
+   - 用户状态管理(启用/禁用)
+   - 用户删除功能
+
+3. **系统监控**:
+   - 健康检查接口
+   - 服务状态监控
+   - API响应时间统计
+   - 错误日志记录
+
+## 项目结构 v2.0
 
 ```
-orion-game-server/
-├── docs/                     # 项目文档
-│   ├── ARCHITECTURE.md       # 架构设计文档
-│   └── API.md               # API接口文档
-├── src/
-│   ├── services/             # 微服务目录
-│   │   ├── gateway/          # 网关服务器
-│   │   │   ├── index.ts
-│   │   │   ├── connection-manager.ts
-│   │   │   └── message-router.ts
-│   │   ├── login/            # 登录服务器
-│   │   │   ├── index.ts
-│   │   │   ├── auth.controller.ts
-│   │   │   └── token.service.ts
-│   │   └── logic/            # 逻辑服务器
-│   │       ├── index.ts
-│   │       ├── modules/      # 游戏功能模块
-│   │       │   ├── chat/
-│   │       │   ├── match/
-│   │       │   └── battle/
-│   │       └── event-handlers/
-│   ├── common/               # 公共代码
-│   │   ├── config/           # 配置管理
-│   │   ├── database/         # 数据库连接
-│   │   ├── dtos/             # 数据传输对象
-│   │   ├── interfaces/       # TypeScript接口
-│   │   ├── logger/           # 日志系统
-│   │   └── utils/            # 工具函数
-│   └── index.ts              # 项目入口
-├── tests/                    # 测试文件
-├── .env                      # 环境变量
-├── .eslintrc.js             # ESLint配置
-├── .prettierrc              # Prettier配置
-├── package.json
-└── tsconfig.json
+orion-game-server-v2/
+├── 📝 README.md                 # 项目介绍文档
+├── 🏠 ARCHITECTURE.md           # v2.0架构设计文档
+│
+├── 🖥️ server/                    # NestJS后端服务
+│   ├── src/
+│   │   ├── 📚 modules/           # 功能模块
+│   │   │   ├── 🔐 auth/          # 认证模块 (游客/用户登录)
+│   │   │   │   ├── auth.controller.ts
+│   │   │   │   ├── auth.service.ts
+│   │   │   │   ├── auth.module.ts
+│   │   │   │   └── dto/
+│   │   │   ├── 👥 admin/         # 管理后台模块 (用户管理/数据统计)
+│   │   │   │   ├── admin.controller.ts
+│   │   │   │   ├── admin.service.ts
+│   │   │   │   ├── admin.module.ts
+│   │   │   │   └── dto/
+│   │   │   └── 👤 user/          # 用户数据模块 (MongoDB Schema)
+│   │   │       ├── user.service.ts
+│   │   │       ├── user.module.ts
+│   │   │       └── schemas/
+│   │   ├── 🛠️ common/            # 公共组件
+│   │   │   ├── ⚙️ config/        # 配置管理 (数据库/JWT)
+│   │   │   ├── 🛡️ guards/        # 路由守卫 (JWT认证)
+│   │   │   ├── 🏷️ decorators/    # 自定义装饰器 (@Public)
+│   │   │   ├── 📦 dtos/          # 数据传输对象
+│   │   │   └── 🔧 utils/         # 工具函数
+│   │   ├── 🏰 app.module.ts      # 根模块
+│   │   └── 🚀 main.ts            # 应用入口 (Swagger配置)
+│   ├── .env                   # 环境变量配置
+│   ├── package.json           # 后端依赖配置
+│   └── nest-cli.json          # NestJS CLI配置
+│
+├── 📱 admin-dashboard/           # Vue 3 管理后台
+│   ├── src/
+│   │   ├── 📄 views/             # 页面组件
+│   │   │   ├── 📊 Dashboard/     # 仪表板 (数据概览)
+│   │   │   ├── 👥 User/          # 用户管理 (列表/详情)
+│   │   │   └── 📈 Analytics/     # 数据分析 (留存率)
+│   │   ├── 🛣️ router/            # Vue Router路由配置
+│   │   ├── 📦 store/             # Pinia状态管理 (认证状态)
+│   │   ├── 🔌 api/               # API接口封装 (Axios)
+│   │   ├── 📝 types/             # TypeScript类型定义
+│   │   ├── App.vue
+│   │   └── main.ts
+│   ├── ⚡ vite.config.ts        # Vite构建配置
+│   └── package.json           # 前端依赖配置
+│
+└── 📁 docs/                     # 项目文档 (可选)
+    ├── API.md                 # API接口文档
+    └── DEPLOYMENT.md          # 部署指南
+```
 ```
 
 ## 开发规范
@@ -222,6 +275,22 @@ orion-game-server/
 - CDN加速静态资源
 - 缓存策略优化
 
+## 版本升级说明
+
+### v2.0 主要改进
+- **框架升级**: 从自定义Express架架升级为NestJS
+- **文档自动化**: 使用@nestjs/swagger替代手动注释
+- **管理后台**: 新增Vue 3 + Element Plus管理界面
+- **代码简化**: 减少90%的注释代码，提升可读性
+- **类型安全**: 全面TypeScript支持，编译时错误检测
+
+### 迁移优势
+- **开发效率**: 装饰器驱动开发，减少样板代码
+- **企业级**: NestJS企业级框架，成熟的生态系统
+- **自动文档**: Swagger文档与代码同步，零维护成本
+- **现代化UI**: Vue 3 + Element Plus企业级组件
+- **类型安全**: TypeScript全覆盖，编译时错误检测
+
 ---
 
-**核心理念**: 代码应该像散文一样易读，业务逻辑清晰表达，技术细节封装隐藏。通过良好的架构设计和代码规范，构建一个现代化、高可用、安全且易于维护的分布式游戏服务器框架。
+**v2.0 核心理念**: 采用企业级框架和最佳实践，在保持代码简洁易读的同时，提供强大的功能支持和类型安全保障。通过NestJS模块化架构和Vue 3现代化前端，构建一个高性能、高可用、易于维护的游戏服务器管理系统。
